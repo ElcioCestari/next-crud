@@ -1,6 +1,6 @@
 interface BotaoProps {
   children: any;
-  cor?: "green" | "blue" | "gray";
+  cor?: 'green' | 'blue' | 'gray' | 'red';
   className?: string;
 }
 

@@ -1,4 +1,5 @@
 import Botao from "../components/botao";
+import Formulario from "../components/formulario";
 import Layout from "../components/layout";
 import Tabela from "../components/tabela";
 import Cliente from "../core/cliente";
@@ -27,6 +28,7 @@ export default function Home() {
           clienteSelecionado={clienteSelecionado}
           clienteExcluido={clienteExcluido}
         ></Tabela>
+        <Formulario cliente={clientes[1]}/>
       </Layout>
     </div>
   );
