@@ -5,6 +5,8 @@ import Entrada from "./entrada";
 
 interface FormularioProps {
   cliente: Cliente;
+  cancelado?: () => void;
+  clienteMudou?: (cliente: Cliente) => void;
 }
 
 const Formulario = (props: FormularioProps) => {
@@ -14,16 +16,43 @@ const Formulario = (props: FormularioProps) => {
   return (
     <div>
       {id ? (
-        <Entrada texto="Codigo" valor={id} somenteLeitura className="mt-4"></Entrada>
+        <Entrada
+          texto="Codigo"
+          valor={id}
+          somenteLeitura
+          className="mt-4"
+        ></Entrada>
       ) : (
         false
       )}
-      <Entrada texto="Nome" valor={nome} tipo="text" onChange={setNome} className="mt-4" />
-      <Entrada texto="Idade" valor={idade} tipo="number" onChange={setIdade} className="mt-4"/>
-    
+      <Entrada
+        texto="Nome"
+        valor={nome}
+        tipo="text"
+        onChange={setNome}
+        className="mt-4"
+      />
+      <Entrada
+        texto="Idade"
+        valor={idade}
+        tipo="number"
+        onChange={setIdade}
+        className="mt-4"
+      />
+
       <div className={`flex justify-end mt-7`}>
-        <Botao className="from-gray-600 to-gray-400 m-2">Cancelar</Botao>
-        <Botao className="from-blue-700 to-blue-400 m-2">{id ? 'Editar' : 'Salvar'}</Botao>
+        <Botao
+          onClick={props.cancelado}
+          className="from-gray-600 to-gray-400 m-2"
+        >
+          Cancelar
+        </Botao>
+        <Botao
+          onClick={() => props.clienteMudou?.(new Cliente(nome, +idade, id))}
+          className="from-blue-700 to-blue-400 m-2"
+        >
+          {id ? "Editar" : "Salvar"}
+        </Botao>
       </div>
     </div>
   );
