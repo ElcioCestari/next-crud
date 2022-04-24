@@ -6,17 +6,25 @@ import Tabela from "../components/tabela";
 import Cliente from "../core/cliente";
 
 export default function Home() {
-  const clientes = [new Cliente("Ana", 31, "1"), new Cliente("Pedro", 30, "2")];
-
+  const [visivel, setVisivel] = useState<"tabela" | "form">("tabela");
+  const [cliente, setCliente] = useState<Cliente>(Cliente.vazio());
+  const [clientes, setClientes] = useState([
+    new Cliente("Ana", 31, "1"),
+    new Cliente("Pedro", 30, "2"),
+  ]);
   const clienteSelecionado = (cliente: Cliente) => {
-    console.log(cliente.nome);
+    setCliente(cliente);
+    setVisivel("form");
   };
   const clienteExcluido = (cliente: Cliente) => {};
   const salvarCliente = (cliente: Cliente) => {
-    console.log(cliente.nome);
-  }
+    setVisivel("tabela");
+    const index = clientes.findIndex((c) => c.id === cliente.id);
+    const novoClientes = clientes;
+    novoClientes.splice(index, 1, cliente);
+    setClientes(novoClientes);
+  };
 
-  const [visivel, setVisivel] = useState<"tabela" | "form">("tabela");
   return (
     <div
       className={`flex justify-center items-center
@@ -28,7 +36,14 @@ export default function Home() {
         {visivel === "tabela" ? (
           <>
             <div className="flex justify-end">
-              <Botao cor="green" className="mb-4" onClick={ () => setVisivel('form')}>
+              <Botao
+                cor="green"
+                className="mb-4"
+                onClick={() => {
+                  setVisivel("form");
+                  setCliente(Cliente.vazio());
+                }}
+              >
                 Novo cliente
               </Botao>
             </div>
@@ -39,7 +54,11 @@ export default function Home() {
             ></Tabela>
           </>
         ) : (
-          <Formulario cliente={clientes[1]} clienteMudou={salvarCliente} cancelado={ () => setVisivel('tabela')} />
+          <Formulario
+            cliente={cliente}
+            clienteMudou={salvarCliente}
+            cancelado={() => setVisivel("tabela")}
+          />
         )}
       </Layout>
     </div>

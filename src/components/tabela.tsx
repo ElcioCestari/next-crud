@@ -24,14 +24,14 @@ function Tabela(props: TabelaProps) {
     return (
       <td className="p-4 flex justify-center">
         {props.clienteSelecionado ? (
-          <button onClick={() => props.clienteSelecionado?.(cliente) } className="flex justify-center text-red-500 rounded-full hover:bg-purple-50 p-1">
+          <button onClick={() => props.clienteExcluido?.(cliente) } className="flex justify-center text-red-500 rounded-full hover:bg-purple-50 p-1">
             {Delete}
           </button>
         ) : (
           false
         )}
         {props.clienteExcluido ? (
-          <button onClick={() => props.clienteExcluido?.(cliente)} className="flex justify-center text-green-600 rounded-full hover:bg-purple-50 p-1">
+          <button onClick={() => props.clienteSelecionado?.(cliente)} className="flex justify-center text-green-600 rounded-full hover:bg-purple-50 p-1">
             {Edit}
           </button>
         ) : (
