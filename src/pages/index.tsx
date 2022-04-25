@@ -1,28 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ColecaoCliente from "../backend/db/ColecaoCliente";
 import Botao from "../components/botao";
 import Formulario from "../components/formulario";
 import Layout from "../components/layout";
 import Tabela from "../components/tabela";
 import Cliente from "../core/cliente";
+import ClienteRepository from "../core/ClienteRepository";
 
 export default function Home() {
+  const repository: ClienteRepository = new ColecaoCliente();
+
   const [visivel, setVisivel] = useState<"tabela" | "form">("tabela");
   const [cliente, setCliente] = useState<Cliente>(Cliente.vazio());
-  const [clientes, setClientes] = useState([
-    new Cliente("Ana", 31, "1"),
-    new Cliente("Pedro", 30, "2"),
-  ]);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+
+  function obterTodos() {
+    repository.obtertodos().then((clientes) => {
+      setClientes(clientes);
+      setVisivel("tabela");
+    });
+  }
+
+  useEffect(obterTodos, []);
+
   const clienteSelecionado = (cliente: Cliente) => {
     setCliente(cliente);
     setVisivel("form");
   };
-  const clienteExcluido = (cliente: Cliente) => {};
-  const salvarCliente = (cliente: Cliente) => {
-    setVisivel("tabela");
-    const index = clientes.findIndex((c) => c.id === cliente.id);
-    const novoClientes = clientes;
-    novoClientes.splice(index, 1, cliente);
-    setClientes(novoClientes);
+  const clienteExcluido = async (cliente: Cliente) => {
+    await repository.excluir(cliente);
+    obterTodos();
+  };
+  const salvarCliente = async (cliente: Cliente) => {
+    
+    // const index = clientes.findIndex((c) => c.id === cliente.id);
+    // const novoClientes = clientes;
+    // novoClientes.splice(index, 1, cliente);
+
+    await repository.salvar(cliente);
+    obterTodos();
   };
 
   return (
